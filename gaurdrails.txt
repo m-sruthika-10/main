@@ -1,1 +1,49 @@
-Python is restricted for sysco organization.
+**Python** is restricted for sysco organization.
+**Basic coding standards developers should follow as guardrails**
+1.Consistent Naming Conventions:
+ - Use descriptive, meaningful names for variables, functions, and classes (e.g., calculateTotalPrice instead of calc).
+ - Follow language-specific conventions: camelCase for JavaScript, snake_case for Python, PascalCase for C# classes.
+ - Avoid abbreviations unless widely understood (e.g., numItems over nItms).
+2.Clear Code Structure:
+ - Keep functions small and focused, doing one thing well (Single Responsibility Principle).
+ - Use consistent indentation (e.g., 4 spaces in Python, 2 spaces in JavaScript).
+ - Organize code logically: group related functions/classes, use files/folders for modularity.
+3.Commenting and Documentation:
+ - Write concise, meaningful comments to explain complex logic or intent, not obvious code.
+ - Use docstrings for functions/classes in Python or JSDoc for JavaScript to describe parameters and return values.
+ - Maintain a README for projects, explaining setup, usage, and purpose.
+4.Error Handling:
+ - Always handle exceptions using try-except blocks (Python) or try-catch (JavaScript/C#).
+ - Validate inputs to prevent crashes or unexpected behavior.
+ - Log errors with context (e.g., using logging in Python) for debugging.
+5.Code Formatting:
+ - Use linters/formatters (e.g., ESLint for JavaScript, Black for Python) to enforce consistent style.
+ - Limit line length (e.g., 80–120 characters) for readability.
+ - Avoid trailing whitespace and ensure consistent file endings (e.g., LF).
+6.Version Control Best Practices:
+ - Write clear, concise commit messages (e.g., “Fix bug in login validation”).
+ - Commit logically related changes together; avoid mixing unrelated fixes.
+ - Use branching strategies (e.g., GitFlow) for features, fixes, and releases.
+7.Testing:
+ - Write unit tests for critical functions using frameworks (e.g., pytest for Python, Jest for JavaScript).
+ - Aim for reasonable test coverage (e.g., 70–80% for key modules).
+ - Test edge cases and error conditions, not just happy paths.
+8.Avoid Hardcoding:
+ - Use configuration files or environment variables for constants (e.g., API keys, URLs).
+ - Define reusable constants instead of magic numbers/strings (e.g., MAX_RETRIES = 3).
+9.Performance Considerations:
+ - Avoid unnecessary computations or redundant loops.
+ - Use appropriate data structures (e.g., sets for fast lookups, lists for ordered data).
+ - Profile code to identify bottlenecks before optimizing prematurely.
+10.Security Practices:
+ - Sanitize user inputs to prevent injection attacks (e.g., SQL injection, XSS).
+ - Use secure protocols (e.g., HTTPS) and libraries for sensitive operations.
+ - Avoid exposing sensitive data in logs or error messages.
+11.Code Reviews:
+ - Submit code for review to catch issues early.
+ - Follow feedback constructively and address comments thoroughly.
+ - Keep pull requests small and focused for easier review.
+12.Maintainability:
+ - Refactor code regularly to improve clarity and reduce technical debt.
+ - Follow DRY (Don’t Repeat Yourself) to avoid duplication.
+ - Delete commented-out or dead code to keep the codebase clean.
