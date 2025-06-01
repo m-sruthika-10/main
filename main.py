@@ -1,49 +1,22 @@
-def factorial(n):
-    """
-    Calculates the factorial of a non-negative integer.
+from fastapi import FastAPI, Request
+import subprocess
+import uvicorn
 
-    Args:
-        n: The non-negative integer for which to calculate the factorial.
+app = FastAPI()
 
-    Returns:
-        The factorial of n.  Returns 1 if n is 0.
-        Raises ValueError if n is negative or not an integer.
-    """
+@app.post("/webhook")
+async def webhook(request: Request):
+    data = await request.json()
+    pr_number = data.get("pr_number", "unknown")
+    action = data.get("action", "unknown")
+    print(f"Received webhook for PR #{pr_number} with action {action}")
 
-    #Error Handling: Check for valid input
-    if not isinstance(n, int):
-        raise ValueError("Input must be an integer.")
-    if n < 0:
-        raise ValueError("Input must be a non-negative integer.")
+    # Trigger your LangChain workflow script
+    # Adjust the path if needed
+    subprocess.Popen(["python3", "langchain_workflow.py"])
 
-    #Base Case: Factorial of 0 is 1
-    if n == 0:
-        return 1
+    return {"message": "Workflow triggered"}
 
-    #Recursive Calculation (can also be done iteratively)
-    else:
-        result = 1
-        for i in range(1, n + 1):
-            result *= i
-        return result
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 
-
-#Example Usage
-try:
-    number = 5
-    result = factorial(number)
-    print(f"The factorial of {number} is {result}")
-
-    number = 0
-    result = factorial(number)
-    print(f"The factorial of {number} is {result}")
-
-    number = -1
-    result = factorial(number)
-    print(f"The factorial of {number} is {result}")
-
-except ValueError as e:
-    print(f"Error: {e}")
-
-except Exception as e:
-    print(f"An unexpected error occurred: {e}")
