@@ -1,4 +1,3 @@
-**Python** is restricted for sysco organization.
 **Basic coding standards developers should follow as guardrails**
 1.Consistent Naming Conventions:
  - Use descriptive, meaningful names for variables, functions, and classes (e.g., calculateTotalPrice instead of calc).
