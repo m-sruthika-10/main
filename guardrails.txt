@@ -1,48 +1,89 @@
-**Basic coding standards developers should follow as guardrails**
-1.Consistent Naming Conventions:
- - Use descriptive, meaningful names for variables, functions, and classes (e.g., calculateTotalPrice instead of calc).
- - Follow language-specific conventions: camelCase for JavaScript, snake_case for Python, PascalCase for C# classes.
- - Avoid abbreviations unless widely understood (e.g., numItems over nItms).
-2.Clear Code Structure:
- - Keep functions small and focused, doing one thing well (Single Responsibility Principle).
- - Use consistent indentation (e.g., 4 spaces in Python, 2 spaces in JavaScript).
- - Organize code logically: group related functions/classes, use files/folders for modularity.
-3.Commenting and Documentation:
- - Write concise, meaningful comments to explain complex logic or intent, not obvious code.
- - Use docstrings for functions/classes in Python or JSDoc for JavaScript to describe parameters and return values.
- - Maintain a README for projects, explaining setup, usage, and purpose.
-4.Error Handling:
- - Always handle exceptions using try-except blocks (Python) or try-catch (JavaScript/C#).
- - Validate inputs to prevent crashes or unexpected behavior.
- - Log errors with context (e.g., using logging in Python) for debugging.
-5.Code Formatting:
- - Use linters/formatters (e.g., ESLint for JavaScript, Black for Python) to enforce consistent style.
- - Limit line length (e.g., 80–120 characters) for readability.
- - Avoid trailing whitespace and ensure consistent file endings (e.g., LF).
-6.Version Control Best Practices:
- - Write clear, concise commit messages (e.g., “Fix bug in login validation”).
- - Commit logically related changes together; avoid mixing unrelated fixes.
- - Use branching strategies (e.g., GitFlow) for features, fixes, and releases.
-7.Testing:
- - Write unit tests for critical functions using frameworks (e.g., pytest for Python, Jest for JavaScript).
- - Aim for reasonable test coverage (e.g., 70–80% for key modules).
- - Test edge cases and error conditions, not just happy paths.
-8.Avoid Hardcoding:
- - Use configuration files or environment variables for constants (e.g., API keys, URLs).
- - Define reusable constants instead of magic numbers/strings (e.g., MAX_RETRIES = 3).
-9.Performance Considerations:
- - Avoid unnecessary computations or redundant loops.
- - Use appropriate data structures (e.g., sets for fast lookups, lists for ordered data).
- - Profile code to identify bottlenecks before optimizing prematurely.
-10.Security Practices:
- - Sanitize user inputs to prevent injection attacks (e.g., SQL injection, XSS).
- - Use secure protocols (e.g., HTTPS) and libraries for sensitive operations.
- - Avoid exposing sensitive data in logs or error messages.
-11.Code Reviews:
- - Submit code for review to catch issues early.
- - Follow feedback constructively and address comments thoroughly.
- - Keep pull requests small and focused for easier review.
-12.Maintainability:
- - Refactor code regularly to improve clarity and reduce technical debt.
- - Follow DRY (Don’t Repeat Yourself) to avoid duplication.
- - Delete commented-out or dead code to keep the codebase clean.
+# Python Coding Standards (Based on PEP 8 and Best Practices)
+1. Indentation
+   - Use **4 spaces** per indentation level.
+   - Avoid tabs; use spaces for consistency.
+   - Maximum line length: **79 characters** (72 for docstrings/comments).
+
+2. Whitespace
+   - Surround operators (`=`, `+`, `<`) with single spaces: `x = 1`, not `x=1`.
+   - No spaces around `=` in default arguments: `def func(x=1):`, not `def func(x = 1):`.
+   - Avoid trailing whitespace or extra blank lines.
+   - Single space after commas: `[1, 2, 3]`, not `[1,2,3]`.
+
+3. Line Breaks and Blank Lines
+   - **Two blank lines** before/after top-level functions and classes.
+   - **One blank line** between methods in a class.
+   - Break long lines using parentheses/brackets/braces or backslash (`\`).
+   - Avoid multiple statements on one line (e.g., no `if x > 0: x = 1`).
+
+4. Naming Conventions
+   - Variables/functions: `snake_case` (e.g., `my_variable`, `calculate_sum`).
+   - Classes: `CamelCase` (e.g., `MyClass`).
+   - Constants: `UPPER_SNAKE_CASE` (e.g., `MAX_VALUE`).
+   - Avoid single-letter names except for counters (`i`) or exceptions (`e`).
+   - Use descriptive names; avoid unclear abbreviations.
+
+5. Imports
+   - Place imports at file top, grouped as:
+     1. Standard library (e.g., `import os`).
+     2. Third-party (e.g., `import numpy`).
+     3. Local (e.g., `from my_module import my_function`).
+   - One import per line: `import os\nimport sys`, not `import os, sys`.
+   - Avoid wildcard imports (`from module import *`).
+   - Prefer absolute imports: `from mypackage.module import func`.
+
+6. Comments
+   - Use **block comments** (`#`) for concise explanations.
+   - Write **docstrings** for public modules/classes/functions using `"""`.
+   - Docstrings should cover purpose, parameters, returns, and exceptions.
+   - Avoid redundant inline comments (e.g., `x = x + 1  # Increment x`).
+
+7. String Quotes
+   - Use single (`'`) or double quotes (`"`) consistently; prefer `"` for docstrings.
+   - Use triple quotes (`"""` or `'''`) for multiline strings/docstrings.
+
+8. Function and Method Design
+   - Functions should have a single responsibility.
+   - Use keyword arguments for clarity: `func(a, b, verbose=True)`.
+   - Return consistent types; avoid implicit `None` unless intentional.
+
+9. Error Handling
+   - Use specific exceptions: `except ValueError:`, not `except:`.
+   - Avoid bare `except`; they catch unintended exceptions.
+   - Limit `try`/`except` to code that might raise exceptions.
+
+10. Code Organization
+    - Group related code into functions/classes.
+    - Use modules for logical organization; keep modules focused.
+    - Avoid global variables; pass data explicitly.
+
+11. Additional Best Practices
+
+    11.1 Type Hints (PEP 484)
+        - Use type annotations: `def add(a: int, b: int) -> int:`.
+        - Enforce with `mypy`.
+
+    11.2 Testing
+        - Write tests using `unittest`, `pytest`, or `nose`.
+        - Use descriptive test names: `test_function_handles_invalid_input`.
+        - Aim for high coverage.
+
+    11.3 Code Formatting Tools
+        - Use linters: `flake8`, `pylint`.
+        - Use formatters: `black`, `autopep8`.
+        - Configure in `pyproject.toml` or `.flake8`.
+
+    11.4 Version Control and Documentation
+        - Use clear commit messages (e.g., "Add feature X").
+        - Document APIs in docstrings (Google/NumPy format).
+        - Include `README.md` with setup/usage instructions.
+
+    11.5 Performance and Readability
+        - Prioritize readability over premature optimization.
+        - Use list comprehensions/generators for efficiency.
+        - Profile with `cProfile` before optimizing.
+
+    11.6 Security
+        - Avoid `eval()`/`exec()` with untrusted input.
+        - Sanitize user inputs to prevent injection.
+        - Use `secrets` for cryptographic operations.
