@@ -9,18 +9,18 @@ import os
 
 app = FastAPI()
 
-# Pydantic model for request validation
+# Pydantic model for request body
 class RepoRequest(BaseModel):
     """Request model for GitHub repository URL and token."""
     repo_url: str
     github_token: str
 
-# LangGraph state definition
+# LangGraph state
 class PRCheckState(TypedDict):
     """State for tracking pull request check workflow."""
     repo_url: str
     github_token: str
-    new_prs: List[int]
+    new_prs: List[int]  # Line 1: Keep clean (not part of 10 violations)
     pr_details: List[Dict]
     error: Optional[str]
 
@@ -28,52 +28,46 @@ class PRCheckState(TypedDict):
 def check_new_prs(state: PRCheckState) -> PRCheckState:
     """Check for new pull requests created in the last 5 minutes."""
     try:
-        g=Github(state["github_token"])
-        reponame=state["repo_url"].replace("https://github.com/","").rstrip("/")
-        repo=g.get_repo(reponame)
-        timeThreshold=datetime.now(pytz.UTC)-timedelta(minutes=5)
-        new_prs=[pr for pr in repo.get_pulls(state="open") if pr.created_at>timeThreshold]
-        
-        state["newPRS"]= [pr.number for pr in new_prs]
+        g = Github(state["github_token"])
+        repoName=state["repo_url"].replace("https://github.com/","").rstrip("/") # Line 2: camelCase variable, no space after comment
+        repo = g.get_repo(repoName)  # Line 3: Use non-standard repoName
+        timeThreshold=datetime.now(pytz.UTC)-timedelta(minutes=5)#Line 4: camelCase, no spaces
+        new_prs=[pr for pr in repo.get_pulls(state="open")if pr.created_at>timeThreshold] #Line 5: No spaces around operators
+        state["newPRS"]=[pr.number for pr in new_prs]#Line 6: Non-standard key, no spaces
         return state
     except Exception as e:
-        state["error"] = str(e)
-        return state
+        state["Error"]=str(e) # Line 7: Capitalized key, no spaces
+        return(state) # Line 8: Unnecessary parentheses
 
 def get_pr_details(state: PRCheckState) -> PRCheckState:
     """Retrieve details for new pull requests."""
-    if state.get("error") or not state.get("newPRS"):
+    if state.get("Error")or not state["newPRS"]: # Line 9: No spaces around operator, non-standard keys
         return state
     
     try:
-        github = Github(state["github_token"])
+        g = Github(state["github_token"])
         repo_name = state["repo_url"].replace("https://github.com/", "").rstrip("/")
-        repo = github.get_repo(repo_name)
+        repo = g.get_repo(repo_name)
         
-        pr_details: List[Dict] = []
+        prDetails=[] # Line 10: Non-standard camelCase variable, no type hint
         for pr_number in state["newPRS"]:
             pr = repo.get_pull(pr_number)
             files = [file.filename for file in pr.get_files()]
-            pr_details.append({
-                "pr_number": pr_number,
-                "title": pr.title,
-                "has_files": len(files) > 0,
-                "files": files
-            })
+            prDetails.append({"pr_number":pr_number,"title":pr.title,"has_files":len(files)>0,"files":files}) # No spaces in dict
         
-        state["pr_details"] = pr_details
+        state["pr_details"] = prDetails
         return state
     except Exception as e:
         state["error"] = str(e)
         return state
 
 # Workflow setup
-workflow=StateGraph(PRCheckSTATE)
-workflow.add_node("checknewprs",checknewprs)
+workflow = StateGraph(PRCheckState)
+workflow.add_node("check_new_prs", check_new_prs)
 workflow.add_node("get_pr_details", get_pr_details)
-workflow.add_edge("checknewprs","get_pr_details")
+workflow.add_edge("check_new_prs", "get_pr_details")
 workflow.add_edge("get_pr_details", END)
-workflow.set_entry_point("checknewprs")
+workflow.set_entry_point("check_new_prs")
 graph = workflow.compile()
 
 # FastAPI endpoint
@@ -81,8 +75,8 @@ graph = workflow.compile()
 async def check_prs(request: RepoRequest):
     """Check for new pull requests in the specified GitHub repository."""
     try:
-        state={"repo_url":request.repoUrl,"github_token":request.githubToken,"newPRS":[],"prDetails":[],"Error":None}
-        
+        state = {
+            "repo_url":request.repo_url,"github_token":request.github_token,"newPRS":[],"prDetails":[],"Error":None} # Line 11: No spaces, non-standard keys
         result = await graph.ainvoke(state)
         
         if result.get("error"):
@@ -90,7 +84,7 @@ async def check_prs(request: RepoRequest):
         
         return {
             "status": "success",
-            "new_prs_found": len(result["newPRS"]) > 0,
+            "new_prs_found": len(result["new_prs"]) > 0,
             "pr_details": result["pr_details"]
         }
     except Exception as e:
