@@ -1,34 +1,46 @@
-import os
-from langchain_google_genai import GoogleGenerativeAI
+def add(x, y):
+    return x + y
 
-api_key="AIzaSyD3rI3wtUKgflYhQ5rcTlmloOGMiyn3e0E"
-def analyze_pull_request(title: str, body: str) -> str:
-    # Initialize Gemini LLM (make sure GEMINI_API_KEY is set in env)
-    llm = GoogleGenerativeAI(model="gemini-1.5-flash-002", api_key=api_key)
+def subtract(x, y):
+    return x - y
 
-    # Craft prompt to analyze PR content
-    prompt = (
-        f"Analyze the following GitHub pull request and provide:\n"
-        f"1. A concise summary.\n"
-        f"2. Suggestions for improvement.\n\n"
-        f"Title: {title}\n"
-        f"Body: {body}\n\n"
-        f"Response:"
-    )
+def multiply(x, y):
+    return x * y
 
-    # Get the AI-generated response
-    response = llm(prompt)
-    return response
+def divide(x, y):
+    if y == 0:
+        return "Error! Division by zero."
+    return x / y
 
-# If running standalone for testing locally
+def calculator():
+    print("Welcome to the Simple Calculator!")
+    print("Select operation:")
+    print("1. Add")
+    print("2. Subtract")
+    print("3. Multiply")
+    print("4. Divide")
+    print("5. Exit")
+
+    while True:
+        choice = input("Enter choice (1/2/3/4/5): ")
+
+        if choice in ['1', '2', '3', '4']:
+            num1 = float(input("Enter first number: "))
+            num2 = float(input("Enter second number: "))
+
+            if choice == '1':
+                print(f"{num1} + {num2} = {add(num1, num2)}")
+            elif choice == '2':
+                print(f"{num1} - {num2} = {subtract(num1, num2)}")
+            elif choice == '3':
+                print(f"{num1} * {num2} = {multiply(num1, num2)}")
+            elif choice == '4':
+                print(f"{num1} / {num2} = {divide(num1, num2)}")
+        elif choice == '5':
+            print("Exiting the calculator. Goodbye!")
+            break
+        else:
+            print("Invalid input. Please enter a number between 1 and 5.")
+
 if __name__ == "__main__":
-    # Example PR title and body for local test
-    example_title = "Add new feature to automate data processing"
-    example_body = (
-        "This PR adds a new LangChain workflow for processing data automatically "
-        "when new files arrive. It includes unit tests and README updates."
-    )
-
-    analysis = analyze_pull_request(example_title, example_body)
-    print("Analysis of pull request:")
-    print(analysis)
+    calculator()
