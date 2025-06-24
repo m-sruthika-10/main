@@ -4,18 +4,15 @@ from github import Github
 from langgraph.graph import StateGraph, END
 from typing import TypedDict, Optional
 from datetime import datetime, timedelta
-import pytz  # Added for timezone handling
+import pytz
 import os
 
-# FastAPI app
 app = FastAPI()
 
-# Pydantic model for request body
 class RepoRequest(BaseModel):
     repo_url: str
     github_token: str
 
-# LangGraph state
 class PRCheckState(TypedDict):
     repo_url: str
     github_token: str
@@ -23,20 +20,13 @@ class PRCheckState(TypedDict):
     pr_details: list
     error: Optional[str]
 
-# LangGraph nodes
 def check_new_prs(state: PRCheckState) -> PRCheckState:
     try:
         g = Github(state["github_token"])
         repo_name = state["repo_url"].replace("https://github.com/", "").rstrip("/")
         repo = g.get_repo(repo_name)
-        
-        # Check PRs created in the last 5 minutes, using UTC timezone
         time_threshold = datetime.now(pytz.UTC) - timedelta(minutes=5)
-        new_prs = [
-            pr for pr in repo.get_pulls(state="open")
-            if pr.created_at > time_threshold
-        ]
-        
+        new_prs = [pr for pr in repo.get_pulls(state="open") if pr.created_at > time_threshold]
         state["new_prs"] = [pr.number for pr in new_prs]
         return state
     except Exception as e:
@@ -51,25 +41,17 @@ def get_pr_details(state: PRCheckState) -> PRCheckState:
         g = Github(state["github_token"])
         repo_name = state["repo_url"].replace("https://github.com/", "").rstrip("/")
         repo = g.get_repo(repo_name)
-        
-        pr_details = []
+        pr_details: list = []
         for pr_number in state["new_prs"]:
             pr = repo.get_pull(pr_number)
             files = [file.filename for file in pr.get_files()]
-            pr_details.append({
-                "pr_number": pr_number,
-                "title": pr.title,
-                "has_files": len(files) > 0,
-                "files": files
-            })
-        
+            pr_details.append({"pr_number": pr_number, "title": pr.title, "has_files": len(files) > 0, "files": files})
         state["pr_details"] = pr_details
         return state
     except Exception as e:
         state["error"] = str(e)
         return state
 
-# Define LangGraph workflow
 workflow = StateGraph(PRCheckState)
 workflow.add_node("check_new_prs", check_new_prs)
 workflow.add_node("get_pr_details", get_pr_details)
@@ -78,11 +60,9 @@ workflow.add_edge("get_pr_details", END)
 workflow.set_entry_point("check_new_prs")
 graph = workflow.compile()
 
-# FastAPI endpoint
 @app.post("/check-prs")
 async def check_prs(request: RepoRequest):
     try:
-        # Initialize state
         state = {
             "repo_url": request.repo_url,
             "github_token": request.github_token,
@@ -90,13 +70,9 @@ async def check_prs(request: RepoRequest):
             "pr_details": [],
             "error": None
         }
-        
-        # Run LangGraph workflow
         result = await graph.ainvoke(state)
-        
         if result.get("error"):
             raise HTTPException(status_code=500, detail=result["error"])
-        
         return {
             "status": "success",
             "new_prs_found": len(result["new_prs"]) > 0,
