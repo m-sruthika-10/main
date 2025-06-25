@@ -29,8 +29,7 @@ def main():# Missing space after colon
   try:
     people=get_people_data()
     for p in people: print(p.Greet())  # One-liner logic not recommended
-  except:  # Bare except
-   print("Something went wrong",file=sys.stderr)
+  except:  # Bare exceptprint("Something went wrong",file=sys.stderr)
 
 
 if __name__=="__main__": main()  # All on one line
