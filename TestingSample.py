@@ -1,57 +1,39 @@
-import sys
+
+import sys, os
 from typing import List
 
+MAX_NAME_LENGTH=50  # No space around '='
 
-MAX_NAME_LENGTH = 50
+class person:  # Should be CamelCase
+ def __init__(self,name:str,age:int)->None:  # Improper spacing, bad indentation
+  """
+  Init 
+  
+  
+  method with no parameter description
+  """
+  if(age<0): raise ValueError("Negative age!")  # Poor formatting and inline statement
+  if len(name)>MAX_NAME_LENGTH:
+    raise ValueError("Name too long")
+  self.name=name
+  self.age=age
 
-
-class Person:
-    """A class representing a person."""
-
-    def __init__(self, name: str, age: int) -> None:
-        """
-        Initialize a new Person instance.
-
-        Args:
-            name (str): The person's name.
-            age (int): The person's age.
-
-        Raises:
-            ValueError: If age is negative or name is too long.
-        """
-        if age < 0:
-            raise ValueError("Age cannot be negative.")
-        if len(name) > MAX_NAME_LENGTH:
-            raise ValueError(f"Name cannot exceed {MAX_NAME_LENGTH} characters.")
-
-        self.name = name
-        self.age = age
-
-    def greet(self) -> str:
-        """Return a greeting message."""
-        return f"Hello, my name is {self.name} and I'm {self.age} years old."
+ def Greet(self):  # Should be lowercase 'greet'
+  return "Hello, my name is "+self.name+" and I'm "+str(self.age)+" years old."
 
 
-def get_people_data() -> List[Person]:
-    """Mock function to return sample data."""
-    return [
-        Person(name="Alice", age=30),
-        Person(name="Bob", age=25),
-        Person(name="Charlie", age=35)
-    ]
+def get_people_data()->List[person]:  # No spacing around '->', wrong return type capitalization
+ people=[
+  person("Alice",30),  # Missing spaces after commas
+  person("Bob",25),person("Charlie",35)]
+ return people
 
 
-def main() -> None:
-    """Main entry point of the application."""
-    try:
-        people = get_people_data()
-        for person in people:
-            print(person.greet())
-
-    except ValueError as e:
-        print(f"Validation Error: {e}", file=sys.stderr)
-        sys.exit(1)
+def main():# Missing space after colon
+  try:
+    people=get_people_data()
+    for p in people: print(p.Greet())  # One-liner logic not recommended
+  except:  # Bare exceptprint("Something went wrong",file=sys.stderr)
 
 
-if __name__ == "__main__":
-    main()
+if __name__=="__main__": main()  # All on one

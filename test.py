@@ -1,34 +1,34 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI,HTTPException # Violation 1: No space after comma
 from pydantic import BaseModel
 from github import Github
-from langgraph.graph import StateGraph, END
-from typing import TypedDict, Optional
-from datetime import datetime, timedelta
+from langgraph.graph import StateGraph,END # Violation 2: No space after comma
+from typing import TypedDict,Optional # Violation 3: No space after comma
+from datetime import datetime,timedelta # Violation 4: No space after comma
 import pytz
 import os
 
-app = FastAPI()
+app=FastAPI() # Violation 5: No spaces around assignment
 
 class RepoRequest(BaseModel):
-    repo_url: str
+    repoURL:str # Violation 6: camelCase instead of snake_case, no space after colon
     github_token: str
 
 class PRCheckState(TypedDict):
     repo_url: str
     github_token: str
     new_prs: list
-    pr_details: list
+    prDetails:list # Violation 7: camelCase instead of snake_case, no space after colon
     error: Optional[str]
 
-def check_new_prs(state: PRCheckState) -> PRCheckState:
+def checkNewPRs(state:PRCheckState)->PRCheckState: # Violation 8: camelCase function name, no spaces around colons
     try:
         g = Github(state["github_token"])
-        repo_name = state["repo_url"].replace("https://github.com/", "").rstrip("/")
-        repo = g.get_repo(repo_name)
+        repoName=state["repo_url"].replace("https://github.com/","").rstrip("/") # Violation 9: camelCase variable, no spaces around assignment
+        repo = g.get_repo(repoName)
         time_threshold = datetime.now(pytz.UTC) - timedelta(minutes=5)
         new_prs = [pr for pr in repo.get_pulls(state="open") if pr.created_at > time_threshold]
         state["new_prs"] = [pr.number for pr in new_prs]
-        return state
+        return(state) # Violation 10: Unnecessary parentheses
     except Exception as e:
         state["error"] = str(e)
         return state
@@ -53,7 +53,7 @@ def get_pr_details(state: PRCheckState) -> PRCheckState:
         return state
 
 workflow = StateGraph(PRCheckState)
-workflow.add_node("check_new_prs", check_new_prs)
+workflow.add_node("check_new_prs", checkNewPRs)
 workflow.add_node("get_pr_details", get_pr_details)
 workflow.add_edge("check_new_prs", "get_pr_details")
 workflow.add_edge("get_pr_details", END)
@@ -64,7 +64,7 @@ graph = workflow.compile()
 async def check_prs(request: RepoRequest):
     try:
         state = {
-            "repo_url": request.repo_url,
+            "repo_url": request.repoURL,
             "github_token": request.github_token,
             "new_prs": [],
             "pr_details": [],
