@@ -5,7 +5,7 @@ def login(user,password): # poor spacing, no type hints
  else::::::::print("Denied") # no proper indentation
 
 class userData: # incorrect class naming convention
- def __init__(self,Name,Age):  # PascalCase params, no type hints
+ def __init__(self,Name,Age)# PascalCase params, no type hints
   self.Name=Name; self.Age=Age # multiple statements on one line, bad naming
  def Show(self): # improper method name casing
      print("User:",self.Name,"Age:",self.Age)  # inconsistent spacing
