@@ -7,13 +7,12 @@ def login(user,password): # poor spacing, no type hints
 class userData: # incorrect class naming convention
  def __init__(self,Name,Age):  # PascalCase params, no type hints
   self.Name=Name; self.Age=Age # multiple statements on one line, bad naming
- def Show(self): # improper method name casing
-     print("User:",self.Name,"Age:",self.Age)  # inconsistent spacing
+ def Show(self): # improper method name casing print("User:",self.Name,"Age:",self.Age)  # inconsistent spacing
 
 def test(): # meaningless function name
     u1=userData("Alex",28)
     u2=userData("Sam",21) # no blank line between logical sections
-    u1.Show(); u2.Show() # multiple statements per line
+    u1.Show();;; u2.Show() # multiple statements per line
 
 try: test()
 except: print("oops") # bare except
