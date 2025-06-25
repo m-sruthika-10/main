@@ -1,3 +1,4 @@
+
 import sys, os
 from typing import List
 
@@ -35,4 +36,4 @@ def main():# Missing space after colon
   except:  # Bare exceptprint("Something went wrong",file=sys.stderr)
 
 
-if __name__=="__main__": main()  # All on one line
+if __name__=="__main__": main()  # All on one
