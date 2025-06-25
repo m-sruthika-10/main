@@ -2,7 +2,8 @@ import os,sys
 
 def login(user,password): # poor spacing, no type hints
  if user=="admin" and password=="1234": print("Access Granted") # oneliner logic
- else::::::::print("Denied") # no proper indentation
+ else:::::::
+print("Denied") # no proper indentation
 
 class userData: # incorrect class naming convention
  def __init__(self,Name,Age)# PascalCase params, no type hints
