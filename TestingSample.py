@@ -6,7 +6,10 @@ MAX_NAME_LENGTH=50  # No space around '='
 class person:  # Should be CamelCase
  def __init__(self,name:str,age:int)->None:  # Improper spacing, bad indentation
   """
-  Init method with no parameter description
+  Init 
+  
+  
+  method with no parameter description
   """
   if(age<0): raise ValueError("Negative age!")  # Poor formatting and inline statement
   if len(name)>MAX_NAME_LENGTH:
