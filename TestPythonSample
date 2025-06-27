@@ -1,0 +1,47 @@
+import os, sys  # Multiple imports on one line: not recommended
+import json
+
+MAX_USERS=10  # Missing space around '='
+user_data_cache = []
+
+class user:  # Class name should be CamelCase
+    def __init__(self,username,age,active=True):  # Missing spaces after commas
+        self.username=username
+        self.age = age
+        self.active= active
+
+    def is_adult(self):  # Should be separated by a blank line from __init__
+        return self.age>=18  # Missing space around '>='
+
+
+def load_users_from_file(filepath):  # Function too long, should break into smaller units
+    if not os.path.exists(filepath):
+        print(f"{filepath} not found.")
+        return []
+    with open(filepath,"r") as f:  # Missing space after comma
+        try:
+            users = json.load(f)
+        except:  # Bare except
+            print("Error reading JSON file")
+            return []
+        user_objs = []
+        for u in users:
+            user_objs.append(user(u["username"], u["age"], u.get("active", True)))
+        return user_objs
+
+
+def print_user_summary(user_list):  # Function name could be more descriptive
+    for usr in user_list:
+        print(f"Username: {usr.username}, Age: {usr.age}, Active: {usr.active}")  # Line close to length limit
+    print("Total users:",len(user_list))  # Missing space after comma
+
+
+def main():
+    filepath = "data/users.json"
+    users = load_users_from_file(filepath)
+    if len(users)>MAX_USERS:
+        print("Too many users!")  # No logging
+    else:
+        print_user_summary(users)
+
+if __name__=="__main__": main()  # Multiple issues: no spacing, one-liner for main
