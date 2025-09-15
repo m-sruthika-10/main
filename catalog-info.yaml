@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: m-sruthika-10-main              # Matches ${repo.replace('/', '-')}
+  name: main              # Matches ${repo.replace('/', '-')}
   namespace: default                    # Matches the namespace in the URL
   annotations:
     github.com/project-slug: m-sruthika-10/main  # Added correct annotation
