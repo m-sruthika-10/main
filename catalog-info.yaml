@@ -12,4 +12,4 @@ metadata:
 spec:
   type: service
   lifecycle: experimental
-  owner: user:default/m-sruthika-10      # Use 'user:namespace/username' format for owner
+  owner: m-sruthika-10      # Use 'user:namespace/username' format for owner
